@@ -1,13 +1,28 @@
 <?php 
     include("connection.php");
-    $con=connection();
+    $con = connection();
 
-    $id=$_GET['id'];
+    // Validamos que se haya recibido un 'id' por GET
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
 
-    $sql="SELECT * FROM employees WHERE id='$id'";
-    $query=mysqli_query($con, $sql);
+        // Consulta para obtener los datos del empleado por id
+        $sql = "SELECT * FROM employees WHERE id='$id'";
+        $query = mysqli_query($con, $sql);
 
-    $row=mysqli_fetch_array($query);
+        // Verificamos si la consulta devuelve algún resultado
+        if($query && mysqli_num_rows($query) > 0){
+            $row = mysqli_fetch_array($query);
+        } else {
+            // Si no hay resultados, redirigimos o mostramos un mensaje
+            echo "Empleado no encontrado o consulta fallida.";
+            exit();
+        }
+    } else {
+        // Si no hay 'id' en la URL, mostramos un mensaje o redirigimos
+        echo "ID no proporcionado.";
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -21,15 +36,17 @@
     </head>
     <body>
         <div class="employee-form">
-            <form action="edit_user.php" method="POST">
-                <input type="hidden" name="id" value="<?= $row['id']?>">
-                <input type="text" name="name" placeholder="Nombre" value="<?= $row['name']?>">
-                <input type="text" name="lastname" placeholder="Apellidos" value="<?= $row['lastname']?>">
-                <input type="text" name="age" placeholder="Edad" value="<?= $row['age']?>">
-                <input type="text" name="date" placeholder="Fecha de ingreso" value="<?= $row['date']?>">
-                <input type="text" name="comments" placeholder="Comentarios" value="<?= $row['comments']?>">
-                <input type="text" name="gender" placeholder="Genero" value="<?= $row['gender']?>">
-                <input type="text" name="department" placeholder="Departamento" value="<?= $row['department']?>">
+            <form action="edit_employee.php" method="POST">
+                <!-- Verificación adicional para asegurar que el campo 'id' exista -->
+                <input type="hidden" name="id" value="<?= isset($row['id']) ? $row['id'] : '' ?>">
+                
+                <input type="text" name="name" placeholder="Nombre" value="<?= isset($row['name']) ? $row['name'] : '' ?>">
+                <input type="text" name="lastname" placeholder="Apellidos" value="<?= isset($row['lastname']) ? $row['lastname'] : '' ?>">
+                <input type="text" name="age" placeholder="Edad" value="<?= isset($row['age']) ? $row['age'] : '' ?>">
+                <input type="text" name="date" placeholder="Fecha de ingreso" value="<?= isset($row['date']) ? $row['date'] : '' ?>">
+                <input type="text" name="comments" placeholder="Comentarios" value="<?= isset($row['comments']) ? $row['comments'] : '' ?>">
+                <input type="text" name="gender" placeholder="Genero" value="<?= isset($row['gender']) ? $row['gender'] : '' ?>">
+                <input type="text" name="department" placeholder="Departamento" value="<?= isset($row['department']) ? $row['department'] : '' ?>">
 
                 <input type="submit" value="Actualizar empleado">
             </form>

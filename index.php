@@ -59,7 +59,7 @@ $employees = $employee_controller->listemployees();
                         <th><?= $row['comments'] ?></th>
                         <th><?= $row['gender'] ?></th>
                         <th><?= $row['department'] ?></th>
-                        <th><a href="update.php?id=<?= $row['id'] ?>" class="employee-table--edit">Editar</a></th>
+                        <th><a href="update_employee.php?id=<?= $row['id'] ?>" class="employee-table--edit">Editar</a></th>
                         <th><a href="delete_employee.php?id=<?= $row['id'] ?>" class="employee-table--delete" >Eliminar</a></th>
                     </tr>
                 <?php endwhile; ?>
